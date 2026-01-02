@@ -21,11 +21,11 @@ const riskHistorySchema = new mongoose.Schema({
     },
     oldValue:{
         type : Object,
-        required : true
+        // required : true
     },
     newValue:{
         type : Object,
-        required : true
+        // required : true
     },
     changedBy: {
         type : mongoose.Schema.Types.ObjectId,

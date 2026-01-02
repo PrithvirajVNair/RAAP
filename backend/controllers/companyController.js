@@ -1,3 +1,4 @@
+const audits = require("../models/auditLogModel")
 const companies = require("../models/companyModel")
 const invites = require("../models/invitationModel")
 const users = require("../models/userModel")
@@ -63,6 +64,10 @@ exports.companyInvitationController = async (req, res) => {
                             email, role, companyId: Sender.companyId, status: "Pending", invitedBy: Sender._id
                         })
                         await newInvite.save()
+                        const newAudit = new audits({
+                            action:"INVITED",entityType:"USER",entityId:Reciever._id,performedBy:Sender._id,companyId:Sender.companyId
+                        })
+                        await newAudit.save()
                         res.status(201).json("Invite Sent")
                     }
                     else {
