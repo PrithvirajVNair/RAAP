@@ -157,3 +157,25 @@ exports.changeRiskStatusController = async (req, res) => {
         res.status(500).json(err)
     }
 }
+
+// get risk
+exports.getAllCompanyRiskController = async (req, res) => {
+    const email = req.payload
+    try {
+        const user = await users.findOne({ email: email })
+        if (!user) {
+            return res.status(404).json("User not found")
+        }
+        if (!user.companyId || user.leftCompanyAt !== null) {
+            return res.status(403).json("You do not belong to a company")
+        }
+        if (user.role != "Admin" && user.role != "Manager") {
+            return res.status(403).json("You Have No Permission")
+        }
+        const allRisks = await risks.find({ companyId: user.companyId }).sort({riskScore:-1})
+        res.status(200).json(allRisks)
+    }
+    catch (err) {
+        res.status(500).json(err)
+    }
+}

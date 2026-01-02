@@ -31,8 +31,14 @@ router.post("/invite-company",jwtMiddleware,companyController.companyInvitationC
 
 // =============== RISK =====================
 
+// get all company risk
+router.post("/get-risk",jwtMiddleware,riskController.getAllCompanyRiskController)
+
 // create risk
 router.post("/create-risk",jwtMiddleware,riskController.createRiskController)
+
+// update risk
+router.post("/update-risk",jwtMiddleware,riskController.updateRiskController)
 
 // risk status
 router.post("/create-risk-status",jwtMiddleware,riskController.changeRiskStatusController)
