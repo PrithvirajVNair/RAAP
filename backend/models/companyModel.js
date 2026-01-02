@@ -10,8 +10,13 @@ const companySchema = new mongoose.Schema({
         required : true
     },
     status:{
-        type : String,
-        required : true
+        type : String,          //active / suspended
+        required : true,
+        default:"Active"
+    },
+    createdBy:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "users"
     },
     createdAt:{
         type : Date,

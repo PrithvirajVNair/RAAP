@@ -13,17 +13,27 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    profile:{
+        type : String,
+        // required : true
+    },
     role:{
         type : String,
-        required : true
+        // required : true
     },
     companyId:{
         type : mongoose.Schema.Types.ObjectId,
-        ref:"companies"
+        ref:"companies",
+        default: null
     },
     status:{
         type : String,
-        required : true
+        required : true,
+        default : "Disabled"
+    },
+    leftCompanyAt:{
+        type : Date,
+        default: null
     },
     createdAt:{
         type : Date,

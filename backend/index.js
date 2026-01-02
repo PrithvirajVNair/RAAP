@@ -3,10 +3,13 @@ const express = require("express")
 const cors = require("cors")
 require('./config/connection')
 
+const router = require('./routes/routes')
+
 const server = express()
 
 server.use(cors())
 server.use(express.json())
+server.use(router)
 
 PORT = 3000 || process.env.PORT
 
