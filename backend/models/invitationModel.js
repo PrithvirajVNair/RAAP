@@ -13,6 +13,10 @@ const inviteSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref:"companies"
     },
+    invitedBy:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref:"users"
+    },
     status:{
         type : String,
         required : true
