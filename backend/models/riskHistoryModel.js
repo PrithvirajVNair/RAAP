@@ -17,15 +17,17 @@ const riskHistorySchema = new mongoose.Schema({
     },
     fieldChanged: {
         type : String,           // impact, status, mitigationPlan
-        required : true
+        // required : true
     },
     oldValue:{
         type : Object,
         // required : true
+        default:{status:"N/A"}
     },
     newValue:{
         type : Object,
         // required : true
+        default:{status:"CREATED"}
     },
     changedBy: {
         type : mongoose.Schema.Types.ObjectId,
