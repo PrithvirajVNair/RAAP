@@ -1,3 +1,4 @@
+const audits = require("../models/auditLogModel")
 const riskHistories = require("../models/riskHistoryModel")
 const risks = require("../models/riskModel")
 const users = require("../models/userModel")
@@ -27,17 +28,39 @@ exports.createRiskController = async (req, res) => {
                 const riskScore = impact * likelihood
                 const level = riskScore >= 15 ? "High" : riskScore >= 8 ? "Medium" : "Low"
                 const newRisk = new risks({
-                    title, description, category, impact, likelihood, mitigationPlan: solution, mitigationOwner: assignedTo, dueDate, mitigationStatus: "Open", createdBy: riskOwner._id, companyId: riskOwner.companyId, riskScore, level
+                    title, 
+                    description, 
+                    category, 
+                    impact, 
+                    likelihood, 
+                    mitigationPlan: solution, 
+                    mitigationOwner: assignedTo, 
+                    dueDate, 
+                    mitigationStatus: "Open", 
+                    createdBy: riskOwner._id, 
+                    companyId: riskOwner.companyId, 
+                    riskScore, 
+                    level
                 })
                 await newRisk.save()
+                
                 const newAudit = new audits({
-                    action: "CREATED", entityType: "RISK", entityId: newRisk._id, performedBy: riskOwner._id, companyId: riskOwner.companyId
+                    action: "CREATED", 
+                    entityType: "RISK", 
+                    entityId: newRisk._id, 
+                    performedBy: riskOwner._id, 
+                    companyId: riskOwner.companyId
                 })
                 await newAudit.save()
+
                 const newRiskHistory = new riskHistories({
-                    riskId: newRisk._id, companyId: newRisk.companyId, action: "CREATED", changedBy: riskOwner._id
+                    riskId: newRisk._id, 
+                    companyId: riskOwner.companyId, 
+                    action: "CREATED", 
+                    changedBy: riskOwner._id
                 })
                 await newRiskHistory.save()
+
                 res.status(201).json("Risk created successfully")
             }
             else {
@@ -142,9 +165,14 @@ exports.changeRiskStatusController = async (req, res) => {
         else {
             return res.status(400).json("Invalid Status")
         }
+        riskStatus.updatedAt= Date.now()
         await riskStatus.save()
         const newAudit = new audits({
-            action: "UPDATED", entityType: "RISK", entityId: riskStatus._id, performedBy: statusEditor._id, companyId: statusEditor.companyId
+            action: "UPDATED", 
+            entityType: "RISK", 
+            entityId: riskStatus._id, 
+            performedBy: statusEditor._id, 
+            companyId: statusEditor.companyId
         })
         await newAudit.save()
         const newRiskHistory = new riskHistories({
@@ -173,7 +201,54 @@ exports.getAllCompanyRiskController = async (req, res) => {
             return res.status(403).json("You Have No Permission")
         }
         const allRisks = await risks.find({ companyId: user.companyId }).sort({riskScore:-1})
+        const filteredRisk = allRisks.filter((risk)=>risk.mitigationStatus!="Closed")
+        res.status(200).json({allRisks,filteredRisk})
+    }
+    catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+// get worker risks
+exports.getWorkerRiskController = async (req, res) => {
+    const email = req.payload
+    try {
+        const user = await users.findOne({ email: email })
+        if (!user) {
+            return res.status(404).json("User not found")
+        }
+        if (!user.companyId || user.leftCompanyAt !== null) {
+            return res.status(403).json("You do not belong to a company")
+        }
+        if (user.role != "Worker") {
+            return res.status(403).json("You Have No Permission")
+        }
+        const allRisks = await risks.find({ mitigationOwner: user._id }).sort({riskScore:-1})
         res.status(200).json(allRisks)
+    }
+    catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+// get company risk dashboard status
+exports.getRiskDashbordStatusController = async (req, res) => {
+    const email = req.payload
+    try{
+        const user = await users.findOne({email:email})
+        if(!user){
+            return res.status(404).json("User not found")
+        }
+        if (!user.companyId || user.leftCompanyAt !== null) {
+            return res.status(403).json("You do not belong to a company")
+        }
+        if (user.role != "Admin" && user.role != "Manager") {
+            return res.status(403).json("You Have No Permission")
+        }
+        const riskHigh = await risks.find({companyId:user.companyId}).countDocuments({level:"High"})
+        const riskMedium = await risks.find({companyId:user.companyId}).countDocuments({level:"Medium"})
+        const riskLow = await risks.find({companyId:user.companyId}).countDocuments({level:"Low"})
+        res.status(200).json({riskHigh,riskMedium,riskLow})
     }
     catch (err) {
         res.status(500).json(err)

@@ -43,7 +43,7 @@ const riskSchema = new mongoose.Schema({
     },
     dueDate:{
         type : Date,
-        required : true
+        // required : true
     },
     createdBy:{
         type : mongoose.Schema.Types.ObjectId,
@@ -59,7 +59,7 @@ const riskSchema = new mongoose.Schema({
         default : Date.now
     },
     updatedAt:{
-        type : String,
+        type : Date,
         required : true,
         default : Date.now
     }

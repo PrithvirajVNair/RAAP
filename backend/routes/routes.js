@@ -32,7 +32,10 @@ router.post("/invite-company",jwtMiddleware,companyController.companyInvitationC
 // =============== RISK =====================
 
 // get all company risk
-router.post("/get-risk",jwtMiddleware,riskController.getAllCompanyRiskController)
+router.get("/get-risk",jwtMiddleware,riskController.getAllCompanyRiskController)
+
+// get worker company risk
+router.get("/get-risk-worker",jwtMiddleware,riskController.getWorkerRiskController)
 
 // create risk
 router.post("/create-risk",jwtMiddleware,riskController.createRiskController)
@@ -41,6 +44,9 @@ router.post("/create-risk",jwtMiddleware,riskController.createRiskController)
 router.post("/update-risk",jwtMiddleware,riskController.updateRiskController)
 
 // risk status
-router.post("/create-risk-status",jwtMiddleware,riskController.changeRiskStatusController)
+router.post("/update-risk-status",jwtMiddleware,riskController.changeRiskStatusController)
+
+// get risk dashboard status
+router.get("/get-risk-dashboard-status",jwtMiddleware,riskController.getRiskDashbordStatusController)
 
 module.exports = router

@@ -11,7 +11,7 @@ const auditLogSchema = new mongoose.Schema({
     },
     entityId: {
         type : mongoose.Schema.Types.ObjectId,              // User | Risk (we manually populate)
-        required : true
+        // required : true
     },
     performedBy: {
         type : mongoose.Schema.Types.ObjectId,
