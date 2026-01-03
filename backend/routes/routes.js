@@ -16,7 +16,20 @@ router.post("/user-register",userController.registerController)
 // login User
 router.post("/user-login",userController.userLoginController)
 
+// get company user (for admin/manager to access for adding/assigning users to risk)
+router.get("/get-company-user",jwtMiddleware,userController.getCompanyUsersController)
 
+// search users
+router.post("/search-user",userController.getUsersController)
+
+// invite users
+router.post("/invite-user",jwtMiddleware,userController.sendInviteController)
+
+// get invite 
+router.get("/get-invite",jwtMiddleware,userController.getInviteController)
+
+// get invite 
+router.put("/accept-invite",jwtMiddleware,userController.acceptInviteController)
 
 
 // ============== COMPANY CREATION =============
