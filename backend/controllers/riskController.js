@@ -133,7 +133,6 @@ exports.updateRiskController = async (req, res) => {
     }
 }
 
-
 // change risk status
 exports.changeRiskStatusController = async (req, res) => {
     const { status, risk } = req.body

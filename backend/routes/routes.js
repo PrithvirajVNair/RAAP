@@ -3,6 +3,7 @@ const express = require("express")
 const userController = require('../controllers/userController')
 const companyController = require('../controllers/companyController')
 const riskController = require('../controllers/riskController')
+const commentController = require('../controllers/commentController')
 const jwtMiddleware = require("../middleware/jwtMiddleware")
 
 const router = express.Router()
@@ -48,5 +49,13 @@ router.post("/update-risk-status",jwtMiddleware,riskController.changeRiskStatusC
 
 // get risk dashboard status
 router.get("/get-risk-dashboard-status",jwtMiddleware,riskController.getRiskDashbordStatusController)
+
+// =============== COMMENT =====================
+
+// add comment
+router.post("/add-comment",jwtMiddleware,commentController.addCommentController)
+
+// add comment
+router.post("/get-comment",jwtMiddleware,commentController.getCommentController)
 
 module.exports = router
