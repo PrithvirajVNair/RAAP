@@ -4,6 +4,8 @@ const userController = require('../controllers/userController')
 const companyController = require('../controllers/companyController')
 const riskController = require('../controllers/riskController')
 const commentController = require('../controllers/commentController')
+const auditController = require('../controllers/auditController')
+const riskHistoryController = require('../controllers/riskHistoryController')
 const jwtMiddleware = require("../middleware/jwtMiddleware")
 
 const router = express.Router()
@@ -70,5 +72,13 @@ router.post("/add-comment",jwtMiddleware,commentController.addCommentController)
 
 // add comment
 router.post("/get-comment",jwtMiddleware,commentController.getCommentController)
+
+// =============== AUDIT / RISK HISTORY =====================
+
+// get audit
+router.get("/get-audit",jwtMiddleware,auditController.getAuditController)
+
+// get risk history
+router.get("/get-history",jwtMiddleware,riskHistoryController.getRiskHistoryController)
 
 module.exports = router
