@@ -1,0 +1,19 @@
+<div class="h-screen flex justify-center items-center bg-[#EFECEC]">
+    <div class="flex flex-col gap-5 p-10 text-center bg-white rounded shadow-xl">
+        <p class="raap text-[#FFA500] font-bold text-3xl">RAAP</p>
+        <h2 class="text-2xl">Login to your Account</h2>
+        <p>Login to access all features!</p>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="flex flex-col gap-4 mt-5">
+            <div>
+                <input name="email" formControlName="email" placeholder="Email" class="bg-black/5 px-2 rounded w-full" type="email">
+            </div>
+            <div>
+                <input name="password" formControlName="password" placeholder="Password" class="bg-black/5 px-2 rounded w-full" type="password">
+            </div>
+            <div>
+                <button class="bg-[#FFA000] w-full text-white px-2 py-1 rounded cursor-pointer hover:bg-orange-400">Sign In</button>
+            </div>
+            <p>New User? <a class="text-[#FFA000] hover:underline" routerLink="/register">Sign Up</a></p>
+        </form>
+    </div>
+</div>

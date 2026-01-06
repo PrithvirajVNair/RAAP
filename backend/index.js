@@ -18,5 +18,5 @@ server.listen(PORT,()=>{
 })
 
 server.get("/",(req,res)=>{
-    res.status(200).send("<h1>Server is Running</h1>")
+    res.status(200).send("<h1>RAAP Server is Running</h1>")
 })
