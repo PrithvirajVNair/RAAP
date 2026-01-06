@@ -50,7 +50,8 @@ exports.userLoginController = async (req, res) => {
                         companyId: existingUser.companyId,
                         createdAt: existingUser.createdAt,
                         updatedAt: existingUser.updatedAt,
-                        role: existingUser.role
+                        role: existingUser.role,
+                        leftCompanyAt:existingUser.leftCompanyAt
                     },
                     token
                 })

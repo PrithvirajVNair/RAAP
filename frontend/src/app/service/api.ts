@@ -20,4 +20,9 @@ export class Api {
     return this.http.post(`${this.server_url}/user-login`, reqBody)
   }
 
+  // create company
+  createCompanyAPI(reqBody:any,reqHeader:any){
+    return this.http.post(`${this.server_url}/create-company`,reqBody,reqHeader)
+  }
+
 }

@@ -1,1 +1,121 @@
-<p>home works!</p>
+<app-header></app-header>
+@if(hasNoCompany){
+    <div class="h-screen flex flex-col justify-center items-center gap-5">
+    <h3 class="text-2xl text-black/60">You Don't Belong to any Company</h3>
+    <div class="flex gap-3">
+        <button (click)="toggelCreate()" class="bg-[#FFA000] text-white px-2 py-1 rounded hover:bg-orange-400 cursor-pointer w-30">Create</button>
+        <h3 class="text-2xl text-black/60">Or</h3>
+        <button class="bg-[#006aff] text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer w-30">Join</button>
+    </div>
+    <h3 class="text-2xl text-black/60">A Company</h3>
+</div>
+}
+@else {
+    <div class="h-screen flex flex-col justify-center items-center">
+        <div class="grid grid-cols-2 w-full h-full">
+            <div class="grid grid-rows-2">
+                <div class="flex justify-center items-center p-15">
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="p-5">
+                    <h1 class="text-2xl text-center text-[#FFA000]">Risk List</h1>
+                    <table class="w-full">
+                        <thead class="">
+                            <tr class="bg-[#FFA000]/20">
+                                <th class="p-1">#</th>
+                                <th class="p-1">Title</th>
+                                <th class="p-1">Level</th>
+                                <th class="p-1">Status</th>
+                                <th class="p-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr>
+                                <td>1</td>
+                                <td>Login Token Issue</td>
+                                <td>High</td>
+                                <td>In Progress</td>
+                                <td>
+                                    <button class="text-[#FFA000] cursor-pointer hover:text-orange-400">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Login Token Issue</td>
+                                <td>High</td>
+                                <td>In Progress</td>
+                                <td>
+                                    <button class="text-[#FFA000] cursor-pointer hover:text-orange-400">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Login Token Issue</td>
+                                <td>High</td>
+                                <td>In Progress</td>
+                                <td>
+                                    <button class="text-[#FFA000] cursor-pointer hover:text-orange-400">Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="grid grid-rows-2">
+                <div class="flex justify-center items-center p-15">
+                    <img src="https://substackcdn.com/image/fetch/$s_!L5E0!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdb6e09f6-e928-444b-929f-019d34eea6bb_1024x550.png" style="width: 500px;" alt="">
+                </div>
+                                <div class="p-5">
+                    <h1 class="text-2xl text-center text-[#FFA000]">People</h1>
+                    <table class="w-full">
+                        <thead class="">
+                            <tr class="bg-[#FFA000]/20">
+                                <th class="p-1">#</th>
+                                <th class="p-1">Name</th>
+                                <th class="p-1">Role</th>
+                                <th class="p-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr>
+                                <td>1</td>
+                                <td>PALD</td>
+                                <td>Worker</td>
+                                <td>
+                                    <button class="text-[#FFA000] cursor-pointer hover:text-orange-400">Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if(toggleCreateValue){
+    <div class="absolute inset-0 h-screen bg-black/60 flex justify-center items-center">
+        <form [formGroup]="companyForm" (ngSubmit)="createCompany()" class="bg-white p-10 flex flex-col justify-center items-center gap-5">
+            <div>
+                <h2 class="text-2xl text-[#FFA000]">Create Company</h2>
+            </div>
+            <div class="flex flex-col gap-3">
+                <div>
+                    <input type="text" name="name" formControlName="name" placeholder="Company Name" class="bg-black/5 px-2 py-1">
+                </div>
+                @if(companyForm.get('name')?.errors && companyForm.get('name')?.touched){
+                    <p class="text-red-400 font-semibold">Invalid Name</p>
+                }
+                <div>
+                    <input type="text" name="industry" formControlName="industry" placeholder="Industry" class="bg-black/5 px-2 py-1">
+                </div>
+                @if(companyForm.get('industry')?.errors && companyForm.get('industry')?.touched){
+                    <p class="text-red-400 font-semibold">Invalid Name</p>
+                }
+                <div class="flex">
+                    <button type="button" (click)="toggelCreate()" class="bg-[#ff8282] text-white px-2 w-full cursor-pointer hover:bg-red-400 me-2">Cancel</button>
+                    <button type="submit" class="bg-[#FFA000] text-white px-2 w-full cursor-pointer hover:bg-orange-400">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}

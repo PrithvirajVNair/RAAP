@@ -21,7 +21,7 @@ exports.createCompanyController = async (req, res) => {
                 })
                 await newCompany.save()
                 await users.findByIdAndUpdate(Admin._id, { role: "Admin", companyId: newCompany._id, status: "Active", leftCompanyAt: null }, { new: true })
-                res.status(201).json("Company Created")
+                res.status(201).json("Company Created!")
             }
         }
         else {
