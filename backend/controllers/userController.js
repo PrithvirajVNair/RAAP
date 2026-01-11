@@ -82,7 +82,7 @@ exports.getCompanyUsersController = async (req, res) => {
         if (user.role != "Admin" && user.role != "Manager") {
             return res.status(403).json("You Have No Permission")
         }
-        const companyUsers = await users.find({ companyId: user.companyId })
+        const companyUsers = await users.find({ companyId: user.companyId }).select("-password")
         res.status(200).json(companyUsers)
     }
     catch (err) {
@@ -101,6 +101,18 @@ exports.getUsersController = async (req, res) => {
     try {
         const allUser = await users.find(query)
         res.status(200).json(allUser)
+    }
+    catch (err) {
+        res.status(500).json("Server Error")
+    }
+}
+
+//get company Users
+exports.getCurrentUserController = async (req, res) => {
+    const email = req.payload
+    try {
+        const User = await users.findOne({email})
+        res.status(200).json(User)
     }
     catch (err) {
         res.status(500).json("Server Error")

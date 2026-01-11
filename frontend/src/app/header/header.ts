@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -10,6 +10,13 @@ import { RouterLink } from "@angular/router";
 export class Header {
   toggleInviteValue: boolean = false
   toggleProfileValue: boolean = false
+
+  constructor(private router:Router){}
+
+  logout(){
+    sessionStorage.clear()
+    this.router.navigateByUrl('/login')
+  }
 
   toggleInvite(){
     if(this.toggleInviteValue==false){

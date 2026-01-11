@@ -31,6 +31,9 @@ router.post("/invite-user",jwtMiddleware,userController.sendInviteController)
 router.get("/get-invite",jwtMiddleware,userController.getInviteController)
 
 // get invite 
+router.get("/get-current-user",jwtMiddleware,userController.getCurrentUserController)
+
+// get invite 
 router.put("/accept-invite",jwtMiddleware,userController.acceptInviteController)
 
 
@@ -42,6 +45,8 @@ router.post("/create-company",jwtMiddleware,companyController.createCompanyContr
 // create company
 router.post("/invite-company",jwtMiddleware,companyController.companyInvitationController)
 
+// get company 
+router.get("/get-company",jwtMiddleware,companyController.getUserCompanyController)
 
 
 
@@ -49,6 +54,9 @@ router.post("/invite-company",jwtMiddleware,companyController.companyInvitationC
 
 // get all company risk
 router.get("/get-risk",jwtMiddleware,riskController.getAllCompanyRiskController)
+
+// get A Specific company risk
+router.get("/get/:id/risk",jwtMiddleware,riskController.getACompanyRiskController)
 
 // get worker company risk
 router.get("/get-risk-worker",jwtMiddleware,riskController.getWorkerRiskController)

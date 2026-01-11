@@ -6,6 +6,8 @@ const users = require("../models/userModel")
 
 // create Risk
 exports.createRiskController = async (req, res) => {
+    console.log("Inside createRiskController");
+    
     const { title, description, category, impact, likelihood, solution, assignedTo, dueDate } = req.body
     const email = req.payload
     try {
@@ -202,6 +204,32 @@ exports.getAllCompanyRiskController = async (req, res) => {
         const allRisks = await risks.find({ companyId: user.companyId }).sort({riskScore:-1})
         const filteredRisk = allRisks.filter((risk)=>risk.mitigationStatus!="Closed")
         res.status(200).json({allRisks,filteredRisk})
+    }
+    catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+// get A risk
+exports.getACompanyRiskController = async (req, res) => {
+    const {id} = req.params
+    const email = req.payload
+    try {
+        const user = await users.findOne({ email: email })
+        if (!user) {
+            return res.status(404).json("User not found")
+        }
+        if (!user.companyId || user.leftCompanyAt !== null) {
+            return res.status(403).json("You do not belong to a company")
+        }
+        if (user.role != "Admin" && user.role != "Manager") {
+            return res.status(403).json("You Have No Permission")
+        }
+        const risk = await risks.findOne({ _id : id }).populate([
+            {path:"createdBy", select:"username email role"},
+            {path:"mitigationOwner", select:"username email role"}
+        ])
+        res.status(200).json(risk)
     }
     catch (err) {
         res.status(500).json(err)

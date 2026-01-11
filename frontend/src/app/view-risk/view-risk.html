@@ -1,0 +1,53 @@
+<app-header></app-header>
+<div class="flex flex-col justify-center items-center min-h-screen bg-[#FFA000]/10 p-20">
+    <div class="bg-[#FFA000]/10 rounded-xl p-10 w-300 flex flex-col gap-5">
+        <h2 routerLink="/get/{{id}}/risk" class="text-2xl text-center text-[#FFA000]">Risk Details</h2>
+        <div class="flex justify-between items-center">
+            <div>
+                <p>Title : {{risk().title}}</p>
+                <div class="h-12 overflow-y-scroll w-200">
+                    <p>Description : {{risk().description}} Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Expedita ab dolorem laboriosam nisi officia. Dignissimos id doloremque ut pariatur maxime. In
+                        magni itaque beatae iste maiores vel facilis inventore ipsum.</p>
+                </div>
+                <div class="h-12 overflow-y-scroll w-200">
+                    <p>Mitigation Plan : {{risk().mitigationPlan}}</p>
+                </div>
+                <p>Risk Category : {{risk().category}}</p>
+                <p>Risk Score : {{risk().riskScore}}</p>
+                <p>Risk Level : {{risk().level}}</p>
+            </div>
+            <div>
+                <p class="text-black/60">Created At : {{risk()?.createdAt?.split("T")[0]}}</p>
+                <p class="text-black/60">Created By : {{risk()?.createdBy?.username}} - {{risk()?.createdBy?.role}}</p>
+                <p class="text-black/60">Assigned To : {{risk().mitigationOwner?.username}} -
+                    {{risk()?.mitigationOwner?.role}}</p>
+                <p class="text-black/60">Status : {{risk().mitigationStatus}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="w-300 px-0">
+        <h2 class="text-[#FFA000]">Conversations:</h2>
+        <div class="min-h-50 bg-[#FFA000]/5 px-10 rounded-xl">
+            <div class="flex flex-col gap-3">
+                <div class="flex pt-10">
+                    <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" style="width: 30px; border-radius: 50%;" alt="">
+                    <input class="bg-white px-2 rounded ms-2 w-full" placeholder="Write Your Comment" type="text" name="" id="">
+                </div>
+                <div class="flex justify-end items-center">
+                    <button class="bg-[#FFA000]/90 px-2 py-1 rounded text-white cursor-pointer hover:bg-[#FFA000]">Comment</button>
+                </div>
+            </div>
+            <div class="">
+                <div class="flex items-center">
+                    <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" style="width: 30px; border-radius: 50%;" alt="">
+                    <p class="ms-2 text-[#FFA000]">Name</p>
+                </div>
+                <p class="ms-10">Comment Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo, rem fugiat nulla enim cupiditate, corrupti blanditiis architecto dignissimos quam porro saepe maiores, ad dicta molestias quaerat a eveniet nostrum dolor!</p>
+            </div>
+            <div class="flex justify-center items-center h-10">
+                <p>No Comments Available!</p>
+            </div>
+        </div>
+    </div>
+</div>

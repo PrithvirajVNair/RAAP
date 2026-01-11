@@ -1,0 +1,113 @@
+<app-header></app-header>
+<div class="grid grid-cols-6 pt-20">
+    <div class="col-span-1">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-span-5 p-5 flex flex-col gap-5 w-full">
+        <h1 routerLink="/home" class="text-2xl text-center text-[#FFA000]">Risk List</h1>
+        <div class="flex justify-end">
+            <button (click)="toggelRiskCreate()"
+                class="text-white bg-[#FFA000] cursor-pointer hover:bg-orange-400 px-2 py-1 rounded">Add
+                Risk</button>
+        </div>
+        <div class="rounded-xl overflow-hidden">
+            <table class="w-full">
+                <thead class="">
+                    <tr class="bg-[#FFA000]/20">
+                        <th class="p-1">#</th>
+                        <th class="p-1">Title</th>
+                        <th class="p-1">Level</th>
+                        <th class="p-1">Status</th>
+                        <th class="p-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center bg-[#FFA00010]">
+                    @for(risk of companyRisks().filteredRisk; track $index){
+                    <tr>
+                        <td class="py-2">{{$index+1}}</td>
+                        <td class="py-2">{{risk.title}}</td>
+                        <td class="py-2">{{risk.level}}</td>
+                        <td class="py-2">{{risk.mitigationStatus}}</td>
+                        <td class="py-2">
+                            <button routerLink="/get/{{risk._id}}/risk"
+                                class="text-[#FFA000] cursor-pointer hover:text-orange-400">Details</button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@if(toggleRiskValue){
+<div class="fixed inset-0 min-h-screen bg-black/60 flex justify-center items-center z-50">
+    <form [formGroup]="riskForm" (ngSubmit)="addRisk()"
+        class="bg-white p-10 flex flex-col justify-center items-center gap-5 w-100 rounded-xl">
+        <div>
+            <h2 class="text-2xl text-[#FFA000]">Add New Risk</h2>
+        </div>
+        <div class="flex flex-col gap-3 w-full">
+            <div class="w-full">
+                <input type="text" name="title" formControlName="title" placeholder="Title"
+                    class="bg-black/5 px-2 py-1  w-full">
+            </div>
+            @if(riskForm.get('title')?.errors && riskForm.get('title')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Title</p>
+            }
+            <div class="w-full">
+                <input type="text" name="description" formControlName="description" placeholder="Description"
+                    class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('description')?.errors && riskForm.get('description')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Description</p>
+            }
+            <div class="w-full">
+                <input type="text" name="category" formControlName="category" placeholder="Category"
+                    class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('category')?.errors && riskForm.get('category')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Name</p>
+            }
+            <div class="w-full">
+                <input type="text" name="impact" formControlName="impact" placeholder="Impact (1-5)"
+                    class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('impact')?.errors && riskForm.get('impact')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Name</p>
+            }
+            <div class="w-full">
+                <input type="text" name="likelihood" formControlName="likelihood" placeholder="Likelihood (1-5)"
+                    class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('likelihood')?.errors && riskForm.get('likelihood')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Name</p>
+            }
+            <div class="w-full">
+                <input type="text" name="mitigationPlan" formControlName="mitigationPlan" placeholder="Mitigation Plan"
+                    class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('mitigationPlan')?.errors && riskForm.get('mitigationPlan')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Name</p>
+            }
+            <div class="w-full">
+                <input type="text" name="mitigationOwner" formControlName="mitigationOwner"
+                    placeholder="mitigationOwner" class="bg-black/5 px-2 py-1 w-full">
+            </div>
+            @if(riskForm.get('mitigationOwner')?.errors && riskForm.get('mitigationOwner')?.touched){
+            <p class="text-red-400 font-semibold">Invalid Name</p>
+            }
+            <div class="flex w-full justify-center items-center">
+                <label for="date">Due Date:</label>
+                <input id="date" type="date" name="dueDate" formControlName="dueDate" placeholder="dueDate"
+                    class="bg-black/5 px-2 py-1 ms-2">
+            </div>
+            <div class="flex justify-center items-center">
+                <button type="button" (click)="toggelRiskCreate()"
+                    class="bg-[#ff8282] text-white px-2 w-full cursor-pointer hover:bg-red-400 me-2 rounded-xl">Cancel</button>
+                <button type="submit"
+                    class="bg-[#FFA000] text-white px-2 w-full cursor-pointer hover:bg-orange-400 rounded-xl">Create</button>
+            </div>
+        </div>
+    </form>
+</div>
+}

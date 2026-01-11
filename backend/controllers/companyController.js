@@ -33,6 +33,18 @@ exports.createCompanyController = async (req, res) => {
     }
 }
 
+//get company Users
+exports.getUserCompanyController = async (req, res) => {
+    const email = req.payload
+    try {
+        const User = await users.findOne({email}).populate({path:"companyId",populate:{path:"createdBy"}})
+        res.status(200).json(User.companyId)
+    }
+    catch (err) {
+        res.status(500).json("Server Error")
+    }
+}
+
 // company invitation
 exports.companyInvitationController = async (req, res) => {
     const { email, role } = req.body
