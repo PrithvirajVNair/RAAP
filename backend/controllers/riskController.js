@@ -8,7 +8,7 @@ const users = require("../models/userModel")
 exports.createRiskController = async (req, res) => {
     console.log("Inside createRiskController");
     
-    const { title, description, category, impact, likelihood, solution, assignedTo, dueDate } = req.body
+    const { title, description, category, impact, likelihood, solution, dueDate } = req.body
     const email = req.payload
     try {
         const riskOwner = await users.findOne({ email: email })
@@ -18,13 +18,6 @@ exports.createRiskController = async (req, res) => {
         else {
             if (riskOwner.role != "Admin" && riskOwner.role != "Manager") {
                 return res.status(403).json("You Have No Permission")
-            }
-            const assignee = await users.findById(assignedTo)
-            if (!assignee) {
-                return res.status(404).json("Assigned user not found")
-            }
-            if (String(riskOwner.companyId) !== String(assignee.companyId) || assignee.leftCompanyAt !== null) {
-                return res.status(400).json("Assigned user must belong to the same company")
             }
             if (riskOwner.companyId && riskOwner.leftCompanyAt === null) {
                 const riskScore = impact * likelihood
@@ -36,7 +29,6 @@ exports.createRiskController = async (req, res) => {
                     impact, 
                     likelihood, 
                     mitigationPlan: solution, 
-                    mitigationOwner: assignedTo, 
                     dueDate, 
                     mitigationStatus: "Open", 
                     createdBy: riskOwner._id, 
@@ -77,15 +69,11 @@ exports.createRiskController = async (req, res) => {
 
 // update risk
 exports.updateRiskController = async (req, res) => {
-    const { _id, title, description, category, impact, likelihood, solution, assignedTo, dueDate } = req.body
+    const { _id, title, description, category, impact, likelihood, solution, mitigationStatus, dueDate } = req.body
     const email = req.payload
     try {
         const riskEditor = await users.findOne({ email: email })
         const editRisk = await risks.findById(_id)
-        const assignee = await users.findById(assignedTo)
-        if (!assignee) {
-            return res.status(404).json("Assigned user not found")
-        }
         if (!riskEditor) {
             return res.status(404).json("User not found")
         }
@@ -102,10 +90,6 @@ exports.updateRiskController = async (req, res) => {
         if (String(riskEditor.companyId) !== String(editRisk.companyId)) {
             return res.status(403).json("User Must Belong to the Company")
         }
-        // below condition might cause issue
-        if (String(editRisk.companyId) != String(assignee.companyId) || assignee.leftCompanyAt !== null) {
-            return res.status(403).json("Assigned user must belong to the same company")
-        }
         const riskScore = impact * likelihood
         const level = riskScore >= 15 ? "High" : riskScore >= 8 ? "Medium" : "Low"
         editRisk.title = title
@@ -113,8 +97,8 @@ exports.updateRiskController = async (req, res) => {
         editRisk.category = category
         editRisk.impact = impact
         editRisk.likelihood = likelihood
-        editRisk.mitigationPlan = solution
-        editRisk.mitigationOwner = assignedTo
+        editRisk.mitigationPlan = solution,
+        editRisk.mitigationStatus = mitigationStatus,
         editRisk.dueDate = dueDate
         editRisk.riskScore = riskScore
         editRisk.level = level
@@ -129,6 +113,51 @@ exports.updateRiskController = async (req, res) => {
         })
         await newRiskHistory.save()
         res.status(200).json("Risk updated successfully")
+    }
+    catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+// update risk assignee
+exports.updateRiskAssigneeController = async (req, res) => {
+    const { userId, riskId } = req.body
+    console.log(userId);
+    
+    const email = req.payload
+    try {
+        const riskEditor = await users.findOne({ email: email })
+        const editRisk = await risks.findById({_id:riskId})
+        if (!riskEditor) {
+            return res.status(404).json("User not found")
+        }
+        if (!editRisk) {
+            return res.status(404).json("Risk not found")
+        }
+        const prevEditRisk = editRisk.toObject()
+        if (!riskEditor.companyId || riskEditor.leftCompanyAt !== null) {
+            return res.status(403).json("You do not belong to a company")
+        }
+        if (riskEditor.role != "Admin" && riskEditor.role != "Manager") {
+            return res.status(403).json("You Have No Permission")
+        }
+        if (String(riskEditor.companyId) !== String(editRisk.companyId)) {
+            return res.status(403).json("User Must Belong to the Company")
+        }
+        if (userId == editRisk.mitigationOwner){
+            return res.status(409).json("You can't add same user again!!!")
+        }
+        editRisk.mitigationOwner = userId
+        await editRisk.save()
+        const newAudit = new audits({
+            action: "UPDATED", entityType: "RISK", entityId: editRisk._id, performedBy: riskEditor._id, companyId: riskEditor.companyId
+        })
+        await newAudit.save()
+        const newRiskHistory = new riskHistories({
+            riskId: editRisk._id, companyId: editRisk.companyId, action: "UPDATED", changedBy: riskEditor._id, fieldChanged: "CHANGED_MITIGATION_OWNER", oldValue: prevEditRisk, newValue: editRisk.toObject()
+        })
+        await newRiskHistory.save()
+        res.status(200).json("Assignee updated successfully")
     }
     catch (err) {
         res.status(500).json(err)
@@ -272,9 +301,9 @@ exports.getRiskDashbordStatusController = async (req, res) => {
         if (user.role != "Admin" && user.role != "Manager") {
             return res.status(403).json("You Have No Permission")
         }
-        const riskHigh = await risks.find({companyId:user.companyId}).countDocuments({level:"High"})
-        const riskMedium = await risks.find({companyId:user.companyId}).countDocuments({level:"Medium"})
-        const riskLow = await risks.find({companyId:user.companyId}).countDocuments({level:"Low"})
+        const riskHigh = await risks.find({companyId:user.companyId, mitigationStatus: { $ne: "Closed" }}).countDocuments({level:"High"})
+        const riskMedium = await risks.find({companyId:user.companyId, mitigationStatus: { $ne: "Closed" }}).countDocuments({level:"Medium"})
+        const riskLow = await risks.find({companyId:user.companyId, mitigationStatus: { $ne: "Closed" }}).countDocuments({level:"Low"})
         res.status(200).json({riskHigh,riskMedium,riskLow})
     }
     catch (err) {

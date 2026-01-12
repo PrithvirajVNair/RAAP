@@ -25,15 +25,12 @@ export class Risks {
       impact: ["", [Validators.required, Validators.pattern("[1-5]*")]],
       likelihood: ["", [Validators.required, Validators.pattern("[1-5]*")]],
       mitigationPlan: ["", [Validators.required, Validators.pattern("[a-zA-Z0-9 ]*")]],
-      mitigationOwner: ["", [Validators.required, Validators.pattern("[a-zA-Z0-9 ]*")]],
       dueDate: ["", [Validators.required]]
     })
   }
 
 
   addRisk() {
-    console.log("hi");
-
     if (this.riskForm.valid) {
       const title = this.riskForm.value.title
       const description = this.riskForm.value.description
@@ -41,13 +38,14 @@ export class Risks {
       const impact = this.riskForm.value.impact
       const likelihood = this.riskForm.value.likelihood
       const solution = this.riskForm.value.mitigationPlan
-      const assignedTo = this.riskForm.value.mitigationOwner
       const dueDate = this.riskForm.value.dueDate
-      console.log(title, description, category, impact, likelihood, solution, assignedTo, dueDate);
+      console.log(title, description, category, impact, likelihood, solution, dueDate);
 
-      this.api.createRiskAPI({ title, description, category, impact, likelihood, solution, assignedTo, dueDate }).subscribe({
+      this.api.createRiskAPI({ title, description, category, impact, likelihood, solution, dueDate }).subscribe({
         next: (res: any) => {
           console.log(res);
+          alert(res)
+          location.reload()
         },
         error: (reason: any) => {
           console.log(reason);

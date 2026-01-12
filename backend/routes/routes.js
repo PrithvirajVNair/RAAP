@@ -65,7 +65,10 @@ router.get("/get-risk-worker",jwtMiddleware,riskController.getWorkerRiskControll
 router.post("/create-risk",jwtMiddleware,riskController.createRiskController)
 
 // update risk
-router.post("/update-risk",jwtMiddleware,riskController.updateRiskController)
+router.put("/update-risk",jwtMiddleware,riskController.updateRiskController)
+
+// update risk assignee
+router.put("/update-risk-assignee",jwtMiddleware,riskController.updateRiskAssigneeController)
 
 // risk status
 router.post("/update-risk-status",jwtMiddleware,riskController.changeRiskStatusController)

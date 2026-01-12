@@ -40,6 +40,16 @@ export class Api {
     return this.http.post(`${this.server_url}/create-risk`, reqBody, this.appendToken())
   }
 
+  // udpate risk assignee
+  updateRiskAPI(reqBody: any) {
+    return this.http.put(`${this.server_url}/update-risk`, reqBody, this.appendToken())
+  }
+
+  // udpate risk assignee
+  updateRiskAssigneeAPI(reqBody: any) {
+    return this.http.put(`${this.server_url}/update-risk-assignee`, reqBody, this.appendToken())
+  }
+
   // get company
   getCompanyAPI() {
     return this.http.get(`${this.server_url}/get-company`, this.appendToken())

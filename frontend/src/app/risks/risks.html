@@ -89,13 +89,6 @@
             @if(riskForm.get('mitigationPlan')?.errors && riskForm.get('mitigationPlan')?.touched){
             <p class="text-red-400 font-semibold">Invalid Name</p>
             }
-            <div class="w-full">
-                <input type="text" name="mitigationOwner" formControlName="mitigationOwner"
-                    placeholder="mitigationOwner" class="bg-black/5 px-2 py-1 w-full">
-            </div>
-            @if(riskForm.get('mitigationOwner')?.errors && riskForm.get('mitigationOwner')?.touched){
-            <p class="text-red-400 font-semibold">Invalid Name</p>
-            }
             <div class="flex w-full justify-center items-center">
                 <label for="date">Due Date:</label>
                 <input id="date" type="date" name="dueDate" formControlName="dueDate" placeholder="dueDate"
