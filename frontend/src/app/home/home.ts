@@ -222,7 +222,7 @@ export class Home implements AfterViewInit {
       data: {
         labels: ['Low', 'Medium', 'High'],
         datasets: [{
-          label: 'Risks',
+          label: 'Active Risks',
           data: [0, 0, 0], // replace with API data later
           backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
           borderWidth: 1
