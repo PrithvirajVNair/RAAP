@@ -28,13 +28,13 @@ router.post("/search-user",userController.getUsersController)
 router.post("/invite-user",jwtMiddleware,userController.sendInviteController)
 
 // get invite 
-router.get("/get-invite",jwtMiddleware,userController.getInviteController)
+// router.get("/get-invite",jwtMiddleware,userController.getInviteController)
 
 // get invite 
 router.get("/get-current-user",jwtMiddleware,userController.getCurrentUserController)
 
 // get invite 
-router.put("/accept-invite",jwtMiddleware,userController.acceptInviteController)
+// router.put("/accept-invite",jwtMiddleware,userController.acceptInviteController)
 
 
 // ============== COMPANY CREATION =============
@@ -42,11 +42,17 @@ router.put("/accept-invite",jwtMiddleware,userController.acceptInviteController)
 // create company
 router.post("/create-company",jwtMiddleware,companyController.createCompanyController)
 
-// create company
+// company Invite
 router.post("/invite-company",jwtMiddleware,companyController.companyInvitationController)
+
+// company get Invite
+router.get("/get-invite-company",jwtMiddleware,companyController.getInvitesController)
 
 // get company 
 router.get("/get-company",jwtMiddleware,companyController.getUserCompanyController)
+
+// accept company invite
+router.put("/accept-invite",jwtMiddleware,companyController.acceptInviteController)
 
 
 

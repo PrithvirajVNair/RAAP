@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
+import { Api } from '../service/api';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +11,39 @@ import { Router, RouterLink } from "@angular/router";
 export class Header {
   toggleInviteValue: boolean = false
   toggleProfileValue: boolean = false
+  invites = signal<any>([])
 
-  constructor(private router:Router){}
+  constructor(private router:Router, private api:Api){}
+
+  ngOnInit(){
+    this.getInvites()
+  }
+
+  getInvites(){
+    this.api.getInviteAPI().subscribe({
+      next: (res: any) => {
+          this.invites.set(res)          
+          console.log(this.invites());
+        },
+        error: (reason: any) => {
+          console.log(reason);
+
+        }
+    })
+  }
+
+  acceptInvite(invite: any){
+    this.api.acceptInviteAPI(invite).subscribe({
+      next: (res: any) => {
+          alert(res)
+          location.reload()
+        },
+        error: (reason: any) => {
+          console.log(reason);
+          alert(reason.error)
+        }
+    })
+  }
 
   logout(){
     sessionStorage.clear()

@@ -99,3 +99,50 @@ exports.companyInvitationController = async (req, res) => {
         res.status(500).json("Server Error")
     }
 }
+
+// get company invites
+exports.getInvitesController = async(req,res) => {
+    const email = req.payload
+    try{
+        const Invites = await invites.find({email,status:"Pending"}).populate("invitedBy").populate("companyId")
+        res.status(200).json(Invites)
+    }
+    catch (err) {
+        res.status(500).json("Server Error")
+    }
+}
+
+// accept invite
+exports.acceptInviteController = async (req, res) => {
+    const { invite } = req.body
+    console.log(invite);
+    
+    const email = req.payload
+    console.log(email);
+    try {
+        const user = await users.findOne({ email: email })
+        if (!user) {
+            return res.status(404).json("User not found")
+        }
+        if (user.companyId && user.leftCompanyAt == null) {
+            return res.status(403).json("Leave Current Company to Join Another!")
+        }
+        if(invite.email!=email){
+            return res.status(403).json("You Have No Permission!")
+        }
+        const editUser = await users.findByIdAndUpdate(user._id, { companyId: invite.companyId, role: invite.role, status: "Active", leftCompanyAt: null, updatedAt: Date.now() }, { new: true })
+        await invites.findByIdAndUpdate(invite._id,{status:"Accepted"},{new:true})
+        const newAudit = new audits({
+            action: "ACCEPTED INVITE FROM",
+            entityType: "USER",
+            entityId: invite.invitedBy,
+            performedBy: user._id,
+            companyId: invite.companyId
+        })
+        await newAudit.save()
+        res.status(200).json("Invite Accepted!")
+    }
+    catch (err) {
+        res.status(500).json("Server Error")
+    }
+}

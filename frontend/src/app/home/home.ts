@@ -165,7 +165,7 @@ export class Home implements AfterViewInit {
     this.api.getCurrentUsersAPI().subscribe({
       next: (res: any) => {
         sessionStorage.setItem("user", JSON.stringify(res))
-        console.log(res);
+        // console.log(res);
 
       }
     })

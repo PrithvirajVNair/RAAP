@@ -1,31 +1,72 @@
 <nav class="fixed w-full z-50 bg-[#FFA00015] backdrop-blur-2xl">
-    <div class="flex justify-between items-center px-10 py-5 text-xl">
-                <a class="raap text-[#FFA500] font-bold" routerLink="/home">RAAP</a>
+  <div class="flex justify-between items-center px-10 py-5 text-xl">
+    <a class="raap text-[#FFA500] font-bold" routerLink="/home">RAAP</a>
 
-                <ul class="flex justify-center items-center text-[#FFA500] gap-10 font-bold">
-                    <li class="cursor-pointer"><i (click)="toggleInvite()" class="fa-solid fa-envelope"></i></li>
-                    <li class="cursor-pointer">
-                            <img (click)="toggleProfile()" class="border" src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" style="height: 30px; border-radius: 50%;" alt="Profile">
-                    </li>
-                </ul>
-                @if(toggleInviteValue){
-                    <div class="absolute right-25 w-100 min-h-20 top-20 text-base bg-white shadow-xl rounded-xl">
-                        <div class="flex justify-center items-center p-3 gap-3">
-                            <img class="border" src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png" style="height: 30px; border-radius: 50%;" alt="Profile">
-                            <p>Prithviraj has send you an invite to companyName</p>
-                            <button class="hover:bg-red-500 text-red-500 hover:text-white rounded duration-200 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-                            <button class="hover:bg-green-500 text-green-500 hover:text-white rounded duration-200 cursor-pointer"><i class="fa-solid fa-check"></i></button>
-                        </div>
-                        <div class="flex justify-center items-center p-3 gap-3">
-                            <p>You Have No Invites!</p>
-                        </div>
-                    </div>
-                }
-                @if(toggleProfileValue){
-                    <div class="absolute right-10 w-50 min-h-20 top-20 text-base shadow-xl flex flex-col justify-center items-center bg-white rounded-xl">
-                        <a href="" class="hover:text-[#FFA000]">Profile</a>
-                        <a (click)="logout()" class="hover:text-[#FFA000] cursor-pointer">Log Out</a>
-                    </div>
-                }
+    <ul class="flex justify-center items-center text-[#FFA500] gap-10 font-bold">
+      @if (invites().length > 0) {
+        <li class="cursor-pointer relative">
+          <i (click)="toggleInvite()" class="fa-solid fa-envelope"></i
+          ><span class="bg-red-500 absolute p-1 rounded right-px top-px"></span>
+        </li>
+      } @else {
+        <li class="cursor-pointer">
+          <i (click)="toggleInvite()" class="fa-solid fa-envelope"></i>
+        </li>
+      }
+      <li class="cursor-pointer">
+        <img
+          (click)="toggleProfile()"
+          class="border"
+          src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+          style="height: 30px; border-radius: 50%"
+          alt="Profile"
+        />
+      </li>
+    </ul>
+    @if (toggleInviteValue) {
+      <div
+        class="absolute right-25 w-100 min-h-auto top-20 text-base bg-white shadow-xl rounded-xl flex flex-col justify-center items-center"
+      >
+        @if (invites().length > 0) {
+          @for (invite of invites(); track $index) {
+            <div class="flex justify-center items-center p-3 gap-3">
+              <img
+                class="border"
+                src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+                style="height: 30px; border-radius: 50%"
+                alt="Profile"
+              />
+              <p>
+                {{ invite.invitedBy.username }} has send you an invite to
+                {{ invite.companyId.name }}
+              </p>
+              <button
+                class="hover:bg-red-500 text-red-500 hover:text-white rounded duration-200 cursor-pointer"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <button
+                (click)="acceptInvite({invite})"
+                class="hover:bg-green-500 text-green-500 hover:text-white rounded duration-200 cursor-pointer"
+              >
+                <i class="fa-solid fa-check"></i>
+              </button>
             </div>
+          }
+        } @else {
+          <div class="flex justify-center items-center p-3 gap-3">
+            <p>You Have No Invites!</p>
+          </div>
+        }
+      </div>
+    }
+    @if (toggleProfileValue) {
+      <div
+        class="absolute right-10 w-50 min-h-20 top-20 text-base shadow-xl flex flex-col justify-center items-center bg-white rounded-xl"
+      >
+        <a href="" class="hover:text-[#FFA000]">Profile</a>
+        <a (click)="logout()" class="hover:text-[#FFA000] cursor-pointer">Log Out</a>
+      </div>
+    }
+  </div>
 </nav>

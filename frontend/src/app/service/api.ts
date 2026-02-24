@@ -80,4 +80,18 @@ export class Api {
     return this.http.get(`${this.server_url}/get-risk-dashboard-status`, this.appendToken())
   }
 
+  // create Invite
+  createInviteAPI(reqBody:any){
+    return this.http.post(`${this.server_url}/invite-company`,reqBody, this.appendToken())
+  }
+
+  // create Invite
+  getInviteAPI(){
+    return this.http.get(`${this.server_url}/get-invite-company`, this.appendToken())
+  }
+
+  // accept Invite
+  acceptInviteAPI(reqBody:any){
+    return this.http.put(`${this.server_url}/accept-invite`, reqBody, this.appendToken())
+  }
 }
