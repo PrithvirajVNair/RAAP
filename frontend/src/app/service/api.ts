@@ -94,4 +94,14 @@ export class Api {
   acceptInviteAPI(reqBody:any){
     return this.http.put(`${this.server_url}/accept-invite`, reqBody, this.appendToken())
   }
+
+  // add comment
+  addCommentAPI(reqBody:any){
+    return this.http.post(`${this.server_url}/add-comment`, reqBody, this.appendToken())
+  }
+
+  // get comment
+  getCommentAPI(id:string){
+    return this.http.get(`${this.server_url}/get-comment/${id}`, this.appendToken())
+  }
 }

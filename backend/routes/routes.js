@@ -88,7 +88,7 @@ router.get("/get-risk-dashboard-status",jwtMiddleware,riskController.getRiskDash
 router.post("/add-comment",jwtMiddleware,commentController.addCommentController)
 
 // add comment
-router.post("/get-comment",jwtMiddleware,commentController.getCommentController)
+router.get("/get-comment/:id",jwtMiddleware,commentController.getCommentController)
 
 // =============== AUDIT / RISK HISTORY =====================
 

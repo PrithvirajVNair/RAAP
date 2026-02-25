@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="flex flex-col justify-center items-center min-h-screen bg-[#FFA000]/10 p-20">
+<div class="flex flex-col justify-center items-center min-h-screen p-20">
     <div class="bg-[#FFA000]/10 rounded-xl p-10 w-300 flex flex-col gap-5">
         <div class="flex justify-between">
             <div></div>
@@ -34,31 +34,31 @@
     <div class="w-300 px-0">
         <h2 class="text-[#FFA000]">Conversations:</h2>
         <div class="min-h-50 bg-[#FFA000]/5 px-10 rounded-xl">
-            <div class="flex flex-col gap-3">
+            <form [formGroup]="commentForm" (ngSubmit)="addComment(risk()._id)" class="flex flex-col gap-3">
                 <div class="flex pt-10">
                     <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
                         style="width: 30px; border-radius: 50%;" alt="">
-                    <input class="bg-white px-2 rounded ms-2 w-full" placeholder="Write Your Doubts" type="text" name=""
+                    <input class="bg-white px-2 rounded ms-2 w-full" formControlName="comment" placeholder="Write Your Doubts" type="text" name="comment"
                         id="">
                 </div>
                 <div class="flex justify-end items-center">
                     <button
+                        type="submit"
                         class="bg-[#FFA000]/90 px-2 py-1 rounded text-white cursor-pointer hover:bg-[#FFA000]">Comment</button>
                 </div>
-            </div>
-            <div class="">
+            </form>
+            @if(allComments().length>0){@for(comment of allComments(); track $index){<div class="">
                 <div class="flex items-center">
                     <img src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
                         style="width: 30px; border-radius: 50%;" alt="">
-                    <p class="ms-2 text-[#FFA000]">Name</p>
+                    <p class="ms-2 text-[#FFA000]">{{comment.createdBy.username}}</p>
                 </div>
-                <p class="ms-10">Comment Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo, rem fugiat
-                    nulla enim cupiditate, corrupti blanditiis architecto dignissimos quam porro saepe maiores, ad dicta
-                    molestias quaerat a eveniet nostrum dolor!</p>
-            </div>
+                <p class="ms-10">{{comment.comment}}</p>
+            </div>}}
+            @else{
             <div class="flex justify-center items-center h-10">
                 <p>No Comments Available!</p>
-            </div>
+            </div>}
         </div>
     </div>
 </div>

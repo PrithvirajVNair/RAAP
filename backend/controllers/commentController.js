@@ -32,9 +32,11 @@ exports.addCommentController = async (req, res) => {
 
 // get risks comment
 exports.getCommentController = async (req, res) => {
-    const { id } = req.body
+    const { id } = req.params
     try {
-        const allComments = await comments.find({riskId:id})
+        const allComments = await comments.find({riskId:id}).populate("createdBy")
+        console.log(allComments);
+        
         res.status(200).json(allComments)
     }
     catch (err) {
